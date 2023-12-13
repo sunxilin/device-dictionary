@@ -1,0 +1,12 @@
+---------
+2023-06-03 17:02:55.607011
+Caught exception in queryToPrompt during loop of nothing(not a loop):
+("Connection broken: InvalidChunkLength(got length b'', 0 bytes read)", InvalidChunkLength(got length b'', 0 bytes read))
+---------
+2023-12-13 18:49:05.246239
+Caught exception in queryToPrompt during loop of nothing(not a loop):
+HTTPSConnectionPool(host='www.sofmap.com.c.alk.hpcn.transer-cn.com', port=443): Max retries exceeded with url: /product_detail_sp.aspx?sku=22357035 (Caused by ProxyError('Cannot connect to proxy.', ConnectionResetError(54, 'Connection reset by peer')))
+---------
+2023-12-13 18:50:52.637520
+Caught exception in queryToPrompt during loop of nothing(not a loop):
+HTTPSConnectionPool(host='m.yunqishi.net', port=443): Max retries exceeded with url: /dnjc/sjjc/75684.html (Caused by ProxyError('Cannot connect to proxy.', RemoteDisconnected('Remote end closed connection without response')))

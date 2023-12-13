@@ -1,0 +1,11 @@
+simplejson
+sqlalchemy
+pandas
+numpy
+googlesearch-python
+importlib
+requests
+streamlit
+langchain
+beautifulsoup4
+openai
