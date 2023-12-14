@@ -34,9 +34,15 @@ def main():
     #Leveraging google search results via streamlit.
     def googleSearch(query):
         '''Return Google search results.'''
-        from googlesearch import search
+        from .google_search import search
         results = []
-        for j in search(query, num_results=10,sleep_interval=1, lang="en"):
+
+        proxies = {
+            "https":"http://127.0.0.1:7890",
+            "http": "http://127.0.0.1:7890"
+        }
+
+        for j in search(query, num_results=10,sleep_interval=1, lang="en", proxies=proxies):
             results.append(j)
         return results
     
@@ -72,10 +78,6 @@ def main():
                     {google_search_result} 
                     For your final answer, please provide only the product name and processor model, separated by commas.'''
     )
-    
-
-    #Memory 
-    symbol_memory = ConversationBufferMemory(input_key='symbol', memory_key='chat_history')
 
 
     #LLMs

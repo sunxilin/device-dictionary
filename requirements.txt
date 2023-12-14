@@ -2,7 +2,6 @@ simplejson
 sqlalchemy
 pandas
 numpy
-googlesearch-python
 importlib
 requests
 streamlit
