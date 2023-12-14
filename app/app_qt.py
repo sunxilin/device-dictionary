@@ -36,7 +36,7 @@ def main():
         '''Return Google search results.'''
         from googlesearch import search
         results = []
-        for j in search(query, num_results=20, lang="zh-CN"):
+        for j in search(query, num_results=10,sleep_interval=1, lang="en"):
             results.append(j)
         return results
     
@@ -80,7 +80,7 @@ def main():
 
     #LLMs
     llm = OpenAI(temperature=0) 
-    symbol_chain = LLMChain(llm=llm, prompt=symbol_template, verbose=True, memory=symbol_memory) #, output_key='title'
+    symbol_chain = LLMChain(llm=llm, prompt=symbol_template, verbose=True) #, output_key='title'
 
 
     #Show stuff to the screen if there's a user input query
@@ -92,6 +92,3 @@ def main():
         title = symbol_chain.run(input)
 
         st.write(title)
-
-        with st.expander('Symbol History'): 
-            st.info(symbol_memory.buffer)
