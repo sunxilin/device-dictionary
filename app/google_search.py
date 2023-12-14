@@ -5,20 +5,19 @@ from requests import get
 from .user_agents import get_useragent
 
 
-def _req(term, results, lang, start, proxies, timeout):
+def _req(term, results, lang, start, proxies, timeout, cookies=None):
     resp = get(
         url="https://www.google.com/search",
-        headers={
-            "User-Agent": get_useragent()
-        },
+        headers={"User-Agent": get_useragent()},
         params={
             "q": term,
-            "num": results + 2,  # Prevents multiple requests
+            "num": results + 5,  # Prevents multiple requests
             "hl": lang,
             "start": start,
         },
         proxies=proxies,
         timeout=timeout,
+        cookies=cookies,
     )
     resp.raise_for_status()
     return resp
@@ -34,7 +33,16 @@ class SearchResult:
         return f"SearchResult(url={self.url}, title={self.title}, description={self.description})"
 
 
-def search(term, num_results=10, lang="en", proxies=None, advanced=False, sleep_interval=0, timeout=5):
+def search(
+    term,
+    num_results=10,
+    lang="en",
+    proxies=None,
+    advanced=False,
+    sleep_interval=0,
+    timeout=5,
+    cookies=None,
+):
     """Search the Google search engine"""
 
     escaped_term = term.replace(" ", "+")
@@ -43,8 +51,15 @@ def search(term, num_results=10, lang="en", proxies=None, advanced=False, sleep_
     start = 0
     while start < num_results:
         # Send request
-        resp = _req(escaped_term, num_results - start,
-                    lang, start, proxies, timeout)
+        resp = _req(
+            escaped_term,
+            num_results - start,
+            lang,
+            start,
+            proxies,
+            timeout,
+            cookies,
+        )
 
         # Parse
         soup = BeautifulSoup(resp.text, "html.parser")
@@ -53,8 +68,7 @@ def search(term, num_results=10, lang="en", proxies=None, advanced=False, sleep_
             # Find link, title, description
             link = result.find("a", href=True)
             title = result.find("h3")
-            description_box = result.find(
-                "div", {"style": "-webkit-line-clamp:2"})
+            description_box = result.find("div", {"style": "-webkit-line-clamp:2"})
             if description_box:
                 description = description_box.text
                 if link and title and description:

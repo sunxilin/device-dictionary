@@ -16,6 +16,7 @@ def main():
     import requests
     from importlib import reload
     from . import utils  # relative import
+    from .google_search import search
 
     utils = reload(utils)
 
@@ -35,20 +36,23 @@ def main():
     # Leveraging google search results via streamlit.
     def googleSearch(query):
         """Return Google search results."""
-        from .google_search import search
 
         results = []
-
         proxies = {"https": "http://127.0.0.1:7890", "http": "http://127.0.0.1:7890"}
 
         retryCount = 0
         while retryCount < 3:
             try:
                 search_results = search(
-                    query, num_results=5, sleep_interval=1, lang="en", proxies=proxies
+                    query,
+                    num_results=10,
+                    sleep_interval=1,
+                    lang="en",
+                    proxies=proxies,
+                    timeout=10,
                 )
                 break
-            except Exception as e:
+            except:
                 retryCount += 1
                 sleep(5)
 
@@ -58,9 +62,10 @@ def main():
                 pkg_path,
                 filename,
                 func_name=googleSearch.__name__,
-                error=e,
+                error="Google search failed, fallback to baidu search.",
                 loop_item="nothing(not a loop)",
             )
+            search_results = []
 
         for j in search_results:
             results.append(j)
@@ -68,7 +73,7 @@ def main():
 
     # Specify search inputs and parse results with bs4.
     def queryToPrompt():
-        results = googleSearch(query + " processor")
+        results = googleSearch(query + " chipsets")
         prompt = []
         for result in results:
             try:
@@ -98,9 +103,11 @@ def main():
         # Prompt templates: combining user input(a.k.a. symbol) and google search results for specified outputs in nature syntax prompt.
         symbol_template = PromptTemplate(
             input_variables=["symbol", "google_search_result"],
-            template="""Based on the information below, tell me what the product name and processor model specific to the model code of {symbol} are.
+            template="""Based on the information below, tell me what the product name and the chipsets of the device whose model code is {symbol}.
+                        ----------------------------------------
                         {google_search_result} 
-                        For your final answer, please provide only the product name and processor model, separated by commas.""",
+                        ----------------------------------------
+                        For your final answer, please provide only the product name and its chipsets, separated by commas.""",
         )
 
         # LLMs
