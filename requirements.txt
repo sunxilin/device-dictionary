@@ -8,3 +8,4 @@ streamlit
 langchain
 beautifulsoup4
 openai
+flask
