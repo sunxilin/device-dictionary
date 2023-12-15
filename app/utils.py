@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 
 
-pkg_path = "retriever/"
+pkg_path = "app/"
 filename = re.findall("(.*).py", os.path.basename(__file__))
 
 
