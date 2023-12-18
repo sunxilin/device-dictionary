@@ -2,7 +2,6 @@ simplejson
 sqlalchemy
 pandas
 numpy
-importlib
 requests
 streamlit
 langchain

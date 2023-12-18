@@ -1,6 +1,6 @@
 import os
 import re
-from langchain.llms import OpenAI
+from langchain.chat_models import AzureChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from .google_search import search
@@ -12,6 +12,29 @@ from . import utils  # relative import
 # Error log
 pkg_path = utils.pkg_path
 filename = re.findall("(.*).py", os.path.basename(__file__))
+
+# OpenAI API key
+openai_apikey = utils.loadJSON(json_name="openaiapi")["key"]
+os.environ["OPENAI_API_KEY"] = openai_apikey
+
+# OpenAI API base
+openai_apibase = utils.loadJSON(json_name="openaiapi")["base"]
+os.environ["OPENAI_API_BASE"] = openai_apibase
+
+# OpenAI API type
+openai_apitype = utils.loadJSON(json_name="openaiapi")["type"]
+os.environ["OPENAI_API_TYPE"] = openai_apitype
+
+# OpenAI API version
+openai_apiversion = utils.loadJSON(json_name="openaiapi")["version"]
+os.environ["OPENAI_API_VERSION"] = openai_apiversion
+
+# deployment
+deployment = utils.loadJSON(json_name="openaiapi")["deployment"]
+
+# model
+model = utils.loadJSON(json_name="openaiapi")["model"]
+
 
 def googleSearch(query):
     """Return Google search results."""
@@ -84,11 +107,15 @@ def query_model_and_chipsets(model):
     if check_openai_env is False:
         raise Exception("OpenAI API key not found.")
 
-    # Prepare OpenAI API
-    llm = OpenAI(temperature=0)
+    llm = AzureChatOpenAI(
+        openai_api_type=openai_apitype,
+        deployment_name=deployment,
+        model_name=model,
+        temperature=0,
+    )
 
     # Search more info from google
-    google_search_result = queryToPrompt(model)
+    google_search_result = ""
 
     # Generate full prompt
     symbol_template = PromptTemplate(
