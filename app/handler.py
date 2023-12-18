@@ -115,7 +115,7 @@ def query_model_and_chipsets(model):
     )
 
     # Search more info from google
-    google_search_result = ""
+    google_search_result = queryToPrompt(model)
 
     # Generate full prompt
     symbol_template = PromptTemplate(
