@@ -49,7 +49,11 @@ def search(
 
     # Fetch
     start = 0
+    last = -1
     while start < num_results:
+        if last == start:
+            break
+        last = start
         # Send request
         resp = _req(
             escaped_term,
