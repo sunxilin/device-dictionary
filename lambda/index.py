@@ -1,5 +1,5 @@
 
-from app import query
+from .app import query
 
 
 def handler(environ, start_response):
